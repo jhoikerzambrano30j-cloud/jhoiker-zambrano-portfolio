@@ -1,3 +1,9 @@
+-- IMPORTANTE (codificación):
+-- Aplicar este archivo con una herramienta que lea UTF-8.
+-- Si se lee con la codificación ANSI de Windows, los acentos se
+-- corrompen y quedan como caracteres de reemplazo (U+FFFD) en la
+-- base de datos. Aplícalo desde el SQL Editor de Supabase o con
+-- Node (`fetch`), nunca leyéndolo con `Get-Content` de PowerShell.
 -- ============================================================
 --  Reenfoque del contenido: páginas web, diseño gráfico e
 --  infraestructura. Elimina automatización y actualiza el
