@@ -222,7 +222,7 @@ export function SettingsManager({
             <div className="mt-5 flex items-start gap-3 rounded-lg border border-cyan-energy/20 bg-cyan-energy/[0.05] p-3.5">
               <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-cyan-energy" />
               <p className="text-[0.78rem] leading-relaxed text-chrome">
-                Acceso completo a proyectos, servicios, automatizaciones, leads y contratos.
+                Acceso completo a proyectos, servicios, leads y contratos.
               </p>
             </div>
           </Card>

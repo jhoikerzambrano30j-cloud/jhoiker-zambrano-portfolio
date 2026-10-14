@@ -9,9 +9,8 @@ import { cn } from "@/lib/utils";
 const PROJECT_TYPES = [
   "Sitio web / Landing",
   "Aplicación web a medida",
-  "Automatización de procesos",
-  "Arquitectura y consultoría",
-  "Integración de IA",
+  "Diseño de interfaz y marca",
+  "Servidores e infraestructura",
   "Mantenimiento y evolución",
   "Otro",
 ];

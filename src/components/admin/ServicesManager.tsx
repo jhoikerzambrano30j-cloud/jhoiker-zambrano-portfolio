@@ -8,7 +8,15 @@ import { cn, formatCOP } from "@/lib/utils";
 import type { Service, ServiceTier } from "@/lib/types";
 
 const TIERS: ServiceTier[] = ["starter", "professional", "enterprise"];
-const ICONS = ["layout-template", "code-2", "workflow", "boxes", "sparkles", "brain", "shield"];
+const ICONS = [
+  "layout-template",
+  "code-2",
+  "server",
+  "palette",
+  "boxes",
+  "sparkles",
+  "shield",
+];
 
 function Field({
   label,

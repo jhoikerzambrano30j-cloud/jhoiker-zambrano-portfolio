@@ -15,8 +15,8 @@ export function Footer() {
           <div>
             <Logo size="md" showWordmark showRole className="!items-start" />
             <p className="mt-6 max-w-xs text-[0.85rem] leading-relaxed text-steel">
-              Arquitectura digital y automatizaciones con estándar de excelencia impecable.
-              El trabajo habla por sí mismo.
+              Páginas web y aplicaciones con principios de diseño gráfico aplicados en serio, y la
+              infraestructura que las mantiene en línea. El trabajo habla por sí mismo.
             </p>
 
             <div className="mt-6 flex items-center gap-2.5">
@@ -75,10 +75,10 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               {[
                 "Desarrollo web a medida",
-                "Automatización de procesos",
-                "Arquitectura digital",
-                "Consultoría técnica",
-                "Integración de IA",
+                "Diseño de interfaz y marca",
+                "Servidores e infraestructura",
+                "Dominios, DNS y SSL",
+                "Respaldos y monitoreo",
               ].map((s) => (
                 <li key={s}>
                   <Link

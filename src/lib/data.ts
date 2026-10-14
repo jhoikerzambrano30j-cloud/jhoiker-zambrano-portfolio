@@ -1,11 +1,11 @@
 import { createServerSupabase } from "./supabase/server";
 import {
-  FALLBACK_AUTOMATIONS,
+  FALLBACK_CAPABILITIES,
   FALLBACK_PROJECTS,
   FALLBACK_SERVICES,
   FALLBACK_SKILL_GROUPS,
 } from "./content";
-import type { Automation, Project, Service, SkillGroup } from "./types";
+import type { InfrastructureCapability, Project, Service, SkillGroup } from "./types";
 
 /**
  * Capa de acceso a datos para el sitio público.
@@ -77,17 +77,13 @@ export async function getSkillGroups(): Promise<SkillGroup[]> {
   }
 }
 
-export async function getAutomations(): Promise<Automation[]> {
-  if (!isConfigured()) return FALLBACK_AUTOMATIONS;
-  try {
-    const supabase = await createServerSupabase();
-    const { data, error } = await supabase
-      .from("automations")
-      .select("*")
-      .order("sort_order", { ascending: true });
-    if (error || !data || data.length === 0) return FALLBACK_AUTOMATIONS;
-    return data as Automation[];
-  } catch {
-    return FALLBACK_AUTOMATIONS;
-  }
+/**
+ * Capacidades de infraestructura.
+ *
+ * Viven como contenido curado en `content.ts` y no en la base de datos: son
+ * la descripción técnica de un servicio, no datos que cambien con frecuencia.
+ * Así la página se renderiza en el servidor sin consultas adicionales.
+ */
+export function getInfrastructureCapabilities(): InfrastructureCapability[] {
+  return FALLBACK_CAPABILITIES;
 }

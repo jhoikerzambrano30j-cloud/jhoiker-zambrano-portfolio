@@ -10,12 +10,11 @@ import type { Project, ProjectCategory } from "@/lib/types";
 
 const CATEGORIES: ProjectCategory[] = [
   "Web",
-  "Automatización",
-  "App",
-  "IA",
   "E-commerce",
-  "Arquitectura",
   "Data",
+  "Arquitectura",
+  "Infraestructura",
+  "App",
 ];
 
 const STATUSES = ["publicado", "borrador", "archivado"] as const;

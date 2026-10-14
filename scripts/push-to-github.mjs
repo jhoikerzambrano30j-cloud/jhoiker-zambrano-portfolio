@@ -95,6 +95,47 @@ const IGNORE_FILES = new Set([
 ]);
 const IGNORE_SUFFIX = [".tsbuildinfo", ".log"];
 
+/**
+ * Patrones leídos del `.gitignore` real del proyecto.
+ *
+ * Es imprescindible respetarlos: cualquier archivo que el usuario decida
+ * ignorar (por ejemplo un documento con credenciales) NO debe subirse,
+ * aunque el script no lo conozca de antemano.
+ */
+function loadGitignorePatterns() {
+  const gitignore = join(root, ".gitignore");
+  if (!existsSync(gitignore)) return [];
+  return readFileSync(gitignore, "utf8")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith("#") && !l.startsWith("!"))
+    .map((l) => l.replace(/^\/+/, "").replace(/\/+$/, ""));
+}
+
+function toRegex(pattern) {
+  // Convierte un patrón glob de .gitignore en expresión regular.
+  const escaped = pattern
+    .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    .replace(/\*\*/g, "\u0000")
+    .replace(/\*/g, "[^/]*")
+    .replace(/\?/g, "[^/]")
+    .replace(/\u0000/g, ".*");
+  return new RegExp(`^${escaped}$`);
+}
+
+const GITIGNORE_PATTERNS = loadGitignorePatterns();
+const GITIGNORE_REGEXES = GITIGNORE_PATTERNS.map((p) => ({ raw: p, re: toRegex(p) }));
+
+function isIgnoredByGitignore(rel) {
+  const base = rel.split("/").pop() ?? rel;
+  return GITIGNORE_REGEXES.some(({ raw, re }) => {
+    if (re.test(rel)) return true; // ruta completa
+    if (re.test(base)) return true; // solo el nombre del archivo
+    if (raw.includes("/") && rel.startsWith(`${raw}/`)) return true; // carpeta
+    return false;
+  });
+}
+
 function collectFiles(dir, acc = []) {
   for (const entry of readdirSync(dir)) {
     const abs = join(dir, entry);
@@ -103,12 +144,13 @@ function collectFiles(dir, acc = []) {
 
     if (st.isDirectory()) {
       if (IGNORE_DIRS.has(entry)) continue;
+      if (isIgnoredByGitignore(rel)) continue;
       collectFiles(abs, acc);
       continue;
     }
     if (IGNORE_FILES.has(entry)) continue;
     if (IGNORE_SUFFIX.some((s) => entry.endsWith(s))) continue;
-    if (rel.startsWith("supabase/apply-all.sql")) continue; // generado
+    if (isIgnoredByGitignore(rel)) continue;
     acc.push({ rel, abs, size: st.size });
   }
   return acc;
@@ -258,21 +300,30 @@ step(3, "Subir los archivos");
 const files = collectFiles(root).sort((a, b) => a.rel.localeCompare(b.rel));
 info(`${files.length} archivos a publicar (${(files.reduce((s, f) => s + f.size, 0) / 1024).toFixed(0)} KB)`);
 
-// Comprobación de seguridad: nada sensible debe entrar
-const leaks = files.filter(
-  (f) =>
-    f.rel === ".env.local" ||
-    f.rel.endsWith("/.env.local") ||
-    f.rel === ".env" ||
+// Comprobación de seguridad: nada sensible debe entrar.
+// Ojo: los archivos `*.example` son plantillas sin valores reales y sí se publican.
+const SENSITIVE_NAME =
+  /(^|\/)(\.env(\.[a-z]+)?$|TUS-ACCESOS|MANUAL-DE-SOPORTE|PONER-EN-MARCHA|apply-all\.sql)/i;
+
+const leaks = files.filter((f) => {
+  if (/\.example$/i.test(f.rel)) return false; // plantillas de ejemplo: seguras
+  return (
+    SENSITIVE_NAME.test(f.rel) ||
     f.rel.includes("service_role") ||
-    f.rel.startsWith("supabase/apply-all.sql"),
-);
+    f.rel.includes("SERVICE_ROLE")
+  );
+});
+
 if (leaks.length > 0) {
   bad("Se detectaron archivos que NO deben publicarse:");
   leaks.forEach((l) => console.log(`    ${l.rel}`));
+  console.log(
+    `\n${C.dim}Añádelos a .gitignore (el script ahora respeta ese archivo).${C.reset}\n`,
+  );
   process.exit(1);
 }
 ok("Ningún archivo sensible en la lista");
+info(`${GITIGNORE_PATTERNS.length} patrones de .gitignore aplicados`);
 
 const tree = [];
 let uploaded = 0;

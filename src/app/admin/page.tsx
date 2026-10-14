@@ -3,11 +3,11 @@ import {
   FolderKanban,
   Inbox,
   FileSignature,
-  Workflow,
+  Server,
   TrendingUp,
-  Clock,
   ArrowUpRight,
   CircleDollarSign,
+  Briefcase,
 } from "lucide-react";
 import { Card, Badge, Stat } from "@/components/ui/Primitives";
 import { NotConfigured } from "@/components/admin/NotConfigured";
@@ -109,11 +109,11 @@ export default async function AdminDashboardPage() {
           tone="amber"
         />
         <QuickCard
-          href="/admin/automatizaciones"
-          label="Automatizaciones"
-          value={stats.automations}
-          sub={`${stats.activeAutomations} activas`}
-          icon={Workflow}
+          href="/admin/servicios"
+          label="Servicios publicados"
+          value={stats.services}
+          sub="En el catálogo"
+          icon={Briefcase}
           tone="emerald"
         />
       </div>
@@ -152,15 +152,17 @@ export default async function AdminDashboardPage() {
 
         <Card className="p-6" accent>
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-indigo-automation" />
+            <Briefcase className="h-4 w-4 text-indigo-automation" />
             <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-steel-faint">
-              Horas automatizadas
+              Servicios activos
             </span>
           </div>
           <p className="mt-4 font-display text-2xl font-black text-white">
-            {stats.savedHoursMonth} h
+            {stats.services}
           </p>
-          <p className="mt-1 font-mono text-[0.64rem] text-steel-dim">Ahorradas al mes</p>
+          <p className="mt-1 font-mono text-[0.64rem] text-steel-dim">
+            Visibles en el catálogo
+          </p>
         </Card>
       </div>
 

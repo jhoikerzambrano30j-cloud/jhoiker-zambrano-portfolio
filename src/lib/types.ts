@@ -5,12 +5,11 @@
 export type ProjectStatus = "publicado" | "borrador" | "archivado";
 export type ProjectCategory =
   | "Web"
-  | "Automatización"
-  | "App"
-  | "IA"
   | "E-commerce"
+  | "Data"
   | "Arquitectura"
-  | "Data";
+  | "Infraestructura"
+  | "App";
 
 export type ServiceTier = "starter" | "professional" | "enterprise";
 export type LeadStatus = "nuevo" | "contactado" | "en_negociacion" | "ganado" | "perdido" | "archivado";
@@ -23,8 +22,6 @@ export type ContractStatus =
   | "rechazado"
   | "cancelado"
   | "completado";
-export type AutonomyLevel = "supervisado" | "semiautonomo" | "autonomo";
-export type AutomationStatus = "activa" | "pausada" | "borrador" | "error";
 
 export interface Project {
   id: string;
@@ -77,23 +74,14 @@ export interface SkillGroup {
   sort_order: number;
 }
 
-export interface Automation {
+export interface InfrastructureCapability {
   id: string;
   slug: string;
   name: string;
-  description: string;
-  trigger_type: string;
-  tools: string[];
-  autonomy_level: AutonomyLevel;
-  status: AutomationStatus;
-  runs_count: number;
-  success_rate: number | null;
-  saved_hours_month: number | null;
-  workflow: { step: string; detail: string }[];
-  featured: boolean;
+  summary: string;
+  details: string[];
+  icon: string;
   sort_order: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface Lead {
@@ -210,15 +198,12 @@ export interface DashboardStats {
   projects: number;
   publishedProjects: number;
   services: number;
-  automations: number;
-  activeAutomations: number;
   leads: number;
   newLeads: number;
   contracts: number;
   signedContracts: number;
   pipelineValue: number;
   signedValue: number;
-  savedHoursMonth: number;
   recentLeads: Lead[];
   recentContracts: Contract[];
   contractsByStatus: { status: ContractStatus; count: number }[];

@@ -40,18 +40,20 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jhoiker-zambrano-po
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Jhoiker Zambrano — Ingeniería de Software & Arquitectura Digital",
+    default: "Jhoiker Zambrano — Páginas web, diseño gráfico e infraestructura",
     template: "%s · Jhoiker Zambrano",
   },
   description:
-    "Marca personal futurista y cercana. Desarrollo web a medida, automatizaciones fluidas y arquitectura digital con eficiencia técnica absoluta.",
+    "Páginas web y aplicaciones a medida con principios de diseño gráfico aplicados en serio. Administración de servidores, despliegue, respaldos y monitoreo.",
   keywords: [
     "Jhoiker Zambrano",
-    "ingeniería de software",
-    "arquitectura digital",
-    "desarrollo web",
-    "automatización",
-    "n8n",
+    "diseño y desarrollo web",
+    "páginas web",
+    "diseño gráfico",
+    "interfaces",
+    "administración de servidores",
+    "infraestructura",
+    "Linux",
     "Next.js",
     "Supabase",
     "freelance Colombia",
@@ -66,15 +68,15 @@ export const metadata: Metadata = {
     locale: "es_CO",
     url: siteUrl,
     siteName: "Jhoiker Zambrano",
-    title: "Jhoiker Zambrano — Ingeniería de Software & Arquitectura Digital",
+    title: "Jhoiker Zambrano — Páginas web, diseño e infraestructura",
     description:
-      "Eficiencia técnica absoluta: desarrollo web a medida, automatizaciones fluidas y soluciones digitales con estándar de excelencia impecable.",
+      "Páginas web a medida, diseño gráfico aplicado a producto e infraestructura administrada.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jhoiker Zambrano — Ingeniería de Software",
+    title: "Jhoiker Zambrano — Páginas web y diseño",
     description:
-      "Desarrollo web a medida, automatizaciones fluidas y arquitectura digital.",
+      "Páginas web a medida, diseño gráfico aplicado a producto e infraestructura administrada.",
   },
   robots: { index: true, follow: true },
   icons: {

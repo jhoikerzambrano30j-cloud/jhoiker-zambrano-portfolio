@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 const CATEGORY_GLYPH: Record<string, string> = {
   Web: "WWW",
-  Automatización: "n8n",
+  Infraestructura: "SRV",
   App: "APP",
   IA: "AI",
   "E-commerce": "ECOM",

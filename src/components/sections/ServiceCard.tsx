@@ -1,4 +1,13 @@
-import { LayoutTemplate, Code2, Workflow, Boxes, Check, ArrowUpRight, type LucideIcon } from "lucide-react";
+import {
+  LayoutTemplate,
+  Code2,
+  Server,
+  Palette,
+  Boxes,
+  Check,
+  ArrowUpRight,
+  type LucideIcon,
+} from "lucide-react";
 import { Badge } from "@/components/ui/Primitives";
 import { formatCOP, cn } from "@/lib/utils";
 import type { Service } from "@/lib/types";
@@ -6,7 +15,9 @@ import type { Service } from "@/lib/types";
 const ICONS: Record<string, LucideIcon> = {
   "layout-template": LayoutTemplate,
   "code-2": Code2,
-  workflow: Workflow,
+  server: Server,
+  palette: Palette,
+  workflow: Boxes,
   boxes: Boxes,
 };
 

@@ -1,7 +1,6 @@
 import { createAdminSupabase } from "./supabase/server";
 import type {
   AuditLog,
-  Automation,
   Contract,
   DashboardStats,
   Lead,
@@ -33,16 +32,6 @@ export async function adminListServices(): Promise<Service[]> {
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
   return (data ?? []) as Service[];
-}
-
-export async function adminListAutomations(): Promise<Automation[]> {
-  const supabase = await createAdminSupabase();
-  const { data, error } = await supabase
-    .from("automations")
-    .select("*")
-    .order("sort_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return (data ?? []) as Automation[];
 }
 
 export async function adminListLeads(limit = 200): Promise<Lead[]> {
@@ -111,10 +100,9 @@ export async function logAction(
 export async function adminDashboardStats(): Promise<DashboardStats> {
   const supabase = await createAdminSupabase();
 
-  const [projects, services, automations, leads, contracts] = await Promise.all([
+  const [projects, services, leads, contracts] = await Promise.all([
     adminListProjects(),
     adminListServices(),
-    adminListAutomations(),
     adminListLeads(50),
     adminListContracts(50),
   ]);
@@ -149,8 +137,6 @@ export async function adminDashboardStats(): Promise<DashboardStats> {
     projects: projects.length,
     publishedProjects: projects.filter((p) => p.status === "publicado").length,
     services: services.length,
-    automations: automations.length,
-    activeAutomations: automations.filter((a) => a.status === "activa").length,
     leads: totalLeads ?? leads.length,
     newLeads: leads.filter((l) => l.status === "nuevo").length,
     contracts: totalContracts ?? contracts.length,
@@ -161,9 +147,6 @@ export async function adminDashboardStats(): Promise<DashboardStats> {
     signedValue: contracts
       .filter((c) => signedStatuses.includes(c.status))
       .reduce((acc, c) => acc + (c.total ?? 0), 0),
-    savedHoursMonth: automations
-      .filter((a) => a.status === "activa")
-      .reduce((acc, a) => acc + (a.saved_hours_month ?? 0), 0),
     recentLeads: leads.slice(0, 5),
     recentContracts: contracts.slice(0, 5),
     contractsByStatus: Object.entries(contractsByStatus).map(([status, count]) => ({

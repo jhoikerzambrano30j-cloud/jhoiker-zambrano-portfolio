@@ -8,7 +8,7 @@ import { getProjects } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Proyectos",
   description:
-    "Portafolio de Jhoiker Zambrano: sistemas de gestión, automatizaciones con n8n, plataformas con IA, e-commerce y arquitectura digital.",
+    "Portafolio de Jhoiker Zambrano: plataformas web, portales de búsqueda, paneles de datos, e-commerce, sistemas de diseño e infraestructura en producción.",
 };
 
 export const revalidate = 300;
@@ -25,7 +25,7 @@ export default async function ProyectosPage() {
         eyebrow="Portafolio"
         title="Proyectos que"
         highlight="están en producción"
-        description="No es una lista de ejercicios. Son sistemas que operan todos los días, automatizaciones que corren solas y arquitecturas que sostienen productos reales."
+        description="No es una lista de ejercicios. Son páginas y aplicaciones que operan todos los días, con decisiones de diseño detrás de cada pantalla y resultados medibles."
         breadcrumb={[{ label: "Inicio", href: "/" }, { label: "Proyectos" }]}
       />
 

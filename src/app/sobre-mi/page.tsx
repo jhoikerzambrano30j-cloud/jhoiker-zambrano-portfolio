@@ -27,7 +27,7 @@ const TIMELINE = [
   {
     year: "2022",
     title: "De scripts a productos",
-    text: "Pasé de automatizaciones sueltas a aplicaciones completas. Aprendí a modelar datos antes de escribir interfaz, y a diseñar pensando en quien va a mantener el código después de mí.",
+    text: "Pasé de resolver tareas sueltas a construir aplicaciones completas. Aprendí a modelar datos antes de escribir interfaz, y a diseñar pensando en quien va a usar el sistema de pie, con prisa y sin manual.",
   },
   {
     year: "2023",
@@ -36,18 +36,18 @@ const TIMELINE = [
   },
   {
     year: "2024",
-    title: "Automatización como servicio",
-    text: "Consolidé el stack de n8n, Supabase y APIs externas. Empecé a medir el ahorro real: horas al mes recuperadas, errores eliminados, procesos que dejaron de depender de la memoria de una persona.",
+    title: "Fundamentos de diseño gráfico",
+    text: "Estudié en serio lo que antes hacía por intuición: jerarquía, retícula, escala tipográfica, teoría del color y contraste accesible. Convertí esas decisiones en tokens y componentes reutilizables.",
   },
   {
     year: "2025",
-    title: "Sistemas de gestión completos",
-    text: "Llegaron los PMS hoteleros, los e-commerce y los design systems. El patrón se repitió: modelar bien el dominio, construir sobre datos sólidos, entregar interfaces que no exijan manual de uso.",
+    title: "Plataformas completas",
+    text: "Llegaron los sistemas de gestión hotelera, los portales inmobiliarios, los paneles de datos y los e-commerce. El patrón se repitió: entender el negocio, diseñar la jerarquía y construir sobre datos sólidos.",
   },
   {
     year: "2026",
-    title: "IA aplicada con criterio",
-    text: "Integro modelos de lenguaje donde aportan valor medible, no donde suenan bien en una propuesta. Modelado de viabilidad, contenidos adaptativos y asistentes que reducen trabajo real.",
+    title: "Infraestructura propia y de clientes",
+    text: "Asumí la parte que nadie ve: servidores Linux, despliegue continuo, certificados, respaldos con restauración probada y monitoreo con alertas. Una web bonita que se cae no sirve; ahora también me hago cargo de que no se caiga.",
   },
 ];
 
@@ -116,9 +116,9 @@ export default async function SobreMiPage() {
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-2 border-t border-white/[0.07] pt-6">
-                  <Badge tone="cyan">Full-stack</Badge>
-                  <Badge tone="indigo">Automatización</Badge>
-                  <Badge tone="muted">Arquitectura</Badge>
+                  <Badge tone="cyan">Diseño y desarrollo web</Badge>
+                  <Badge tone="indigo">Infraestructura</Badge>
+                  <Badge tone="muted">Design systems</Badge>
                 </div>
 
                 <Link href="/contacto" className="btn-cyan mt-6 w-full">
@@ -138,10 +138,10 @@ export default async function SobreMiPage() {
               </Reveal>
 
               {[
-                "Soy ingeniero de software y arquitecto digital. Mi trabajo consiste en convertir problemas de operación en sistemas que funcionan, y en eliminar el trabajo repetitivo que consume el tiempo de las personas.",
-                "Empecé resolviendo problemas pequeños y concretos: una planilla que nadie quería llenar, un reporte que se armaba a mano cada semana. Con el tiempo entendí que ese tipo de dolor se repite en todas las empresas, y que la diferencia entre una buena y una mala solución está casi siempre en el modelado, no en la interfaz.",
-                "Hoy construyo aplicaciones completas, diseño arquitecturas que aguantan cambios y automatizo procesos con flujos supervisados que no fallan en silencio. Trabajo con tipado estricto, despliegue continuo y documentación real, porque el código que no se puede mantener es deuda disfrazada de entrega.",
-                "Me tomo en serio el estándar: si algo se entrega, se entrega bien. Esa es la promesa de mi marca y la razón por la que mis clientes vuelven.",
+                "Soy desarrollador web y diseñador de interfaces. Mi trabajo consiste en construir páginas y aplicaciones que se entiendan a la primera, y en administrar la infraestructura que las mantiene en línea.",
+                "Empecé resolviendo problemas pequeños y concretos: una planilla que nadie quería llenar, un reporte que se armaba a mano cada semana. Con el tiempo entendí que la diferencia entre una buena y una mala solución casi nunca está en la cantidad de funciones, sino en el orden: cómo se jerarquiza la información y cómo se modelan los datos por debajo.",
+                "Por eso el diseño gráfico no es un adorno en lo que hago. Jerarquía, retícula, escala tipográfica, contraste y color son reglas que aplico con el mismo rigor que el tipado estricto. Y como una página bonita que se cae no sirve, también me encargo de los servidores: despliegue continuo, certificados, respaldos con restauración probada y monitoreo con alertas.",
+                "Me tomo en serio el estándar: si algo se entrega, se entrega bien y sigue funcionando después. Esa es la promesa de mi marca y la razón por la que mis clientes vuelven.",
               ].map((p, i) => (
                 <Reveal key={i} delay={120 + i * 60}>
                   <p className="text-[0.95rem] leading-[1.85] text-steel">{p}</p>

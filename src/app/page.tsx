@@ -1,28 +1,102 @@
 import Link from "next/link";
-import { ArrowUpRight, ArrowRight, Sparkles, Zap, ShieldCheck, Gauge, Layers, GitBranch } from "lucide-react";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  ShieldCheck,
+  Gauge,
+  Layers,
+  GitBranch,
+  Server,
+  Palette,
+  Type,
+  Grid3x3,
+  Eye,
+  Accessibility,
+  Contrast,
+} from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading, Card, Badge, CodeBlock, Stat } from "@/components/ui/Primitives";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 import { ServiceCard } from "@/components/sections/ServiceCard";
-import { AutomationFlow } from "@/components/sections/AutomationFlow";
 import { SkillMatrix } from "@/components/sections/SkillMatrix";
 import { TechMarquee } from "@/components/sections/TechMarquee";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { BRAND } from "@/lib/brand";
-import { getFeaturedProjects, getServices, getSkillGroups, getAutomations } from "@/lib/data";
+import { getFeaturedProjects, getServices, getSkillGroups } from "@/lib/data";
+
+/** Principios de diseño gráfico aplicados a producto digital. */
+const DESIGN_PRINCIPLES = [
+  {
+    icon: Eye,
+    name: "Jerarquía visual",
+    text: "Cada pantalla tiene un dato protagonista y el resto lo acompaña. La escala tipográfica, el peso y el espacio deciden qué se lee primero, sin que el usuario tenga que buscar.",
+    rule: "Una idea dominante por pantalla",
+  },
+  {
+    icon: Grid3x3,
+    name: "Retícula y espaciado",
+    text: "Todo el espaciado nace de una retícula de 8 puntos. La alineación constante es lo que hace que una interfaz se sienta ordenada incluso cuando nadie sabe explicar por qué.",
+    rule: "Retícula de 8 pt en todo el sistema",
+  },
+  {
+    icon: Type,
+    name: "Tipografía con intención",
+    text: "Escalas modulares con interlineado derivado del tamaño, medida de línea entre 60 y 75 caracteres, y familias elegidas por su función: display para titulares, texto para leer, monoespaciada para cifras.",
+    rule: "Jerarquía antes que decoración",
+  },
+  {
+    icon: Palette,
+    name: "Color con propósito",
+    text: "El color señala, no adorna. Una paleta corta donde el acento se reserva para la acción y el estado; superficies neutras para que el contenido respire y no compita.",
+    rule: "El acento pierde fuerza si se usa en todo",
+  },
+  {
+    icon: Contrast,
+    name: "Contraste y legibilidad",
+    text: "Contraste verificado contra los estándares AA y AAA, texto nunca por debajo del umbral y estados que se distinguen también en escala de grises, no solo por color.",
+    rule: "Legible en el sol y con daltonismo",
+  },
+  {
+    icon: Accessibility,
+    name: "Accesibilidad real",
+    text: "Navegación por teclado, foco visible, etiquetas semánticas, movimiento reducido cuando el sistema lo pide. Diseñar accesible es diseñar mejor para todos.",
+    rule: "Si no se puede usar sin ratón, no está terminado",
+  },
+];
+
+/** Capacidades de infraestructura, resumidas para la portada. */
+const INFRA_HIGHLIGHTS = [
+  {
+    icon: Server,
+    name: "Servidores Linux",
+    text: "Aprovisionamiento y administración de Ubuntu Server endurecido, con acceso solo por clave SSH.",
+  },
+  {
+    icon: GitBranch,
+    name: "Despliegue continuo",
+    text: "Cada cambio se integra y se publica solo, con vista previa y reversión inmediata.",
+  },
+  {
+    icon: ShieldCheck,
+    name: "Dominios, DNS y SSL",
+    text: "Certificados que se renuevan automáticamente y registros DNS bien configurados.",
+  },
+  {
+    icon: Layers,
+    name: "Respaldos y monitoreo",
+    text: "Copias cifradas con restauración probada cada mes y alertas antes de que algo falle.",
+  },
+];
 
 export default async function HomePage() {
-  const [projects, services, skillGroups, automations] = await Promise.all([
+  const [projects, services, skillGroups] = await Promise.all([
     getFeaturedProjects(3),
     getServices(),
     getSkillGroups(),
-    getAutomations(),
   ]);
-
-  const activeAutomations = automations.filter((a) => a.status === "activa");
-  const savedHours = activeAutomations.reduce((acc, a) => acc + (a.saved_hours_month ?? 0), 0);
-  const totalRuns = automations.reduce((acc, a) => acc + a.runs_count, 0);
 
   return (
     <>
@@ -53,15 +127,15 @@ export default async function HomePage() {
 
               <Reveal delay={140}>
                 <p className="mt-6 font-sans text-lg font-light tracking-wide text-chrome sm:text-xl">
-                  Ingeniería de Software &amp; Arquitectura Digital
+                  Páginas web, diseño gráfico e infraestructura
                 </p>
               </Reveal>
 
               <Reveal delay={200}>
                 <p className="mt-6 max-w-xl text-[0.95rem] leading-relaxed text-steel">
-                  Construyo software que resuelve problemas reales y automatizo lo que no debería
-                  consumir tu tiempo. Arquitectura limpia, decisiones técnicas defendibles y una
-                  obsesión sana por el detalle.
+                  Construyo páginas web y aplicaciones que se ven bien y funcionan mejor,
+                  aplicando principios de diseño gráfico en serio. Y me encargo de los servidores
+                  donde viven, para que estén siempre en línea.
                 </p>
               </Reveal>
 
@@ -71,8 +145,8 @@ export default async function HomePage() {
                     Ver proyectos
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
-                  <Link href="/contacto" className="btn-ghost">
-                    Iniciar un proyecto
+                  <Link href="/infraestructura" className="btn-ghost">
+                    Infraestructura
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -80,9 +154,9 @@ export default async function HomePage() {
 
               <Reveal delay={320}>
                 <div className="mt-12 grid grid-cols-2 gap-6 border-t border-white/[0.07] pt-8 sm:grid-cols-4">
-                  <Stat value={projects.length > 3 ? "15" : "6"} suffix="+" label="Proyectos" />
-                  <Stat value={savedHours || 40} suffix="h" label="Ahorradas / mes" />
-                  <Stat value="98" suffix="%" label="Éxito en flujos" />
+                  <Stat value="6" suffix="+" label="Proyectos" />
+                  <Stat value="99,9" suffix="%" label="Disponibilidad" />
+                  <Stat value="AA" suffix="/AAA" label="Contraste" />
                   <Stat value="5" suffix=" años" label="Construyendo" />
                 </div>
               </Reveal>
@@ -91,12 +165,9 @@ export default async function HomePage() {
             {/* Columna visual: isotipo protagonista */}
             <Reveal delay={180} className="relative">
               <div className="relative flex items-center justify-center">
-                {/* Halo */}
                 <div className="absolute h-72 w-72 rounded-full bg-cyan-energy/12 blur-[90px] motion-safe:animate-[pulseGlow_3.2s_ease-in-out_infinite]" />
 
-                {/* Marco técnico */}
                 <div className="surface-card relative w-full max-w-md rounded-2xl p-8 sm:p-10">
-                  {/* Esquinas */}
                   {[
                     "left-0 top-0 border-l-2 border-t-2 rounded-tl-2xl",
                     "right-0 top-0 border-r-2 border-t-2 rounded-tr-2xl",
@@ -144,7 +215,7 @@ export default async function HomePage() {
                       title="brand.ts"
                       code={`const brand = {
   owner: "Jhoiker Zambrano",
-  role: "Ingeniería de Software",
+  focus: ["web", "diseño", "servidores"],
   accent: "#38BDF8",
   standard: "excelencia impecable",
 };`}
@@ -160,16 +231,55 @@ export default async function HomePage() {
       {/* ======================= MARQUEE DE TECNOLOGÍAS ======================= */}
       <TechMarquee />
 
+      {/* ====================== PRINCIPIOS DE DISEÑO ====================== */}
+      <section className="relative py-20 sm:py-28">
+        <div className="brand-container">
+          <SectionHeading
+            eyebrow="Principios de diseño"
+            index="01 / 06"
+            title="Buen diseño"
+            highlight="no es decoración"
+            description="Estos seis principios son los que aplico en cada página que construyo. No son preferencias estéticas: son reglas que hacen que una interfaz se entienda, se recuerde y se use sin esfuerzo."
+          />
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {DESIGN_PRINCIPLES.map((p, i) => (
+              <Reveal key={p.name} delay={i * 70}>
+                <Card className="group h-full p-6" interactive accent>
+                  <div className="flex items-start justify-between">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-energy/25 bg-cyan-energy/[0.08]">
+                      <p.icon className="h-5.5 w-5.5 text-cyan-energy" />
+                    </span>
+                    <span className="font-display text-2xl font-black text-white/10">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-5 font-display text-base font-bold text-white">{p.name}</h3>
+                  <p className="mt-3 text-[0.86rem] leading-relaxed text-steel">{p.text}</p>
+
+                  <div className="mt-5 border-t border-white/[0.07] pt-4">
+                    <p className="font-mono text-[0.66rem] uppercase tracking-[0.12em] text-cyan-energy/85">
+                      {p.rule}
+                    </p>
+                  </div>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* =========================== SERVICIOS =========================== */}
       <section className="relative py-20 sm:py-28">
         <div className="brand-container">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
               eyebrow="Servicios"
-              index="01 / 06"
+              index="02 / 06"
               title="Lo que puedo"
-              highlight="construir para ti"
-              description="Desde una landing que convierte hasta la arquitectura completa de tu producto. Cada servicio con alcance claro, entregables concretos y precio desde."
+              highlight="hacer por ti"
+              description="Desde una landing que convierte hasta la infraestructura que la mantiene en línea. Cada servicio con alcance claro, entregables concretos y precio desde."
             />
             <Reveal delay={120}>
               <Link
@@ -198,10 +308,10 @@ export default async function HomePage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
               eyebrow="Portafolio"
-              index="02 / 06"
+              index="03 / 06"
               title="El trabajo"
               highlight="habla por sí mismo"
-              description="Sistemas en producción, automatizaciones corriendo todos los días y arquitecturas pensadas para no reescribirse en dos años."
+              description="Páginas y aplicaciones en producción, cada una con su problema, su solución de diseño y sus resultados medibles."
             />
             <Reveal delay={120}>
               <Link
@@ -224,31 +334,39 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ======================== AUTOMATIZACIONES ======================== */}
+      {/* ======================== INFRAESTRUCTURA ======================== */}
       <section className="relative py-20 sm:py-28">
         <div className="brand-container">
           <SectionHeading
-            eyebrow="Automatización"
-            index="03 / 06"
-            title="El sistema trabaja"
-            highlight="mientras tú decides"
-            description="Flujos supervisados que eliminan el trabajo repetitivo, con monitoreo, reintentos y alertas. Nunca fallan en silencio."
+            eyebrow="Infraestructura"
+            index="04 / 06"
+            title="También me encargo"
+            highlight="de los servidores"
+            description="Una web bonita que se cae no sirve. Administro la infraestructura donde vive tu aplicación: servidores Linux, despliegue, dominios, SSL, respaldos y monitoreo con alertas."
           />
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            {activeAutomations.slice(0, 2).map((automation, i) => (
-              <Reveal key={automation.id} delay={i * 110}>
-                <AutomationFlow automation={automation} />
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {INFRA_HIGHLIGHTS.map((item, i) => (
+              <Reveal key={item.name} delay={i * 80}>
+                <Card className="h-full p-6" interactive>
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-energy/25 bg-cyan-energy/[0.08]">
+                    <item.icon className="h-5.5 w-5.5 text-cyan-energy" />
+                  </span>
+                  <h3 className="mt-5 font-display text-[0.95rem] font-bold text-white">
+                    {item.name}
+                  </h3>
+                  <p className="mt-3 text-[0.85rem] leading-relaxed text-steel">{item.text}</p>
+                </Card>
               </Reveal>
             ))}
           </div>
 
-          <Reveal delay={200}>
+          <Reveal delay={260}>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {[
-                { icon: Zap, label: "Ejecuciones registradas", value: totalRuns.toLocaleString("es-CO") },
-                { icon: Gauge, label: "Tasa de éxito media", value: "98,6%" },
-                { icon: ShieldCheck, label: "Flujos con monitoreo", value: "100%" },
+                { icon: Server, label: "Disponibilidad medida", value: "99,96%" },
+                { icon: ShieldCheck, label: "Restauración probada", value: "Mensual" },
+                { icon: Zap, label: "Incidencias sin detectar", value: "0" },
               ].map((item) => (
                 <Card key={item.label} className="flex items-center gap-4 p-5" accent>
                   <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-cyan-energy/25 bg-cyan-energy/10">
@@ -267,13 +385,13 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
-          <Reveal delay={260}>
+          <Reveal delay={300}>
             <div className="mt-6 text-center">
               <Link
-                href="/automatizaciones"
+                href="/infraestructura"
                 className="group inline-flex items-center gap-2 font-mono text-[0.75rem] uppercase tracking-[0.16em] text-cyan-energy"
               >
-                Ver todas las automatizaciones
+                Ver todo lo que incluye
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
@@ -286,10 +404,10 @@ export default async function HomePage() {
         <div className="brand-container">
           <SectionHeading
             eyebrow="Stack técnico"
-            index="04 / 06"
+            index="05 / 06"
             title="Herramientas que"
             highlight="domino de verdad"
-            description="No listo tecnologías que vi una vez. Esto es lo que uso a diario para llevar productos a producción."
+            description="No listo tecnologías que vi una vez. Esto es lo que uso a diario para diseñar, construir y mantener productos en producción."
           />
           <div className="mt-14">
             <SkillMatrix groups={skillGroups} />
@@ -301,11 +419,11 @@ export default async function HomePage() {
       <section className="relative py-20 sm:py-28">
         <div className="brand-container">
           <SectionHeading
-            eyebrow="Principios"
-            index="05 / 06"
-            title="Cómo"
-            highlight="trabajo"
-            description="Cuatro reglas que aplican a todo proyecto, sin importar el tamaño ni el presupuesto."
+            eyebrow="Cómo trabajo"
+            index="06 / 06"
+            title="Cuatro reglas"
+            highlight="que no negocio"
+            description="Aplican a todo proyecto, sin importar el tamaño ni el presupuesto."
           />
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -313,22 +431,22 @@ export default async function HomePage() {
               {
                 icon: Gauge,
                 title: "Rendimiento primero",
-                text: "Si tarda, no sirve. Cada decisión se mide contra la experiencia real del usuario en su dispositivo real.",
+                text: "Si tarda, no sirve. Cada decisión de diseño y de código se mide contra la experiencia real del usuario en su dispositivo real.",
               },
               {
-                icon: Layers,
-                title: "Arquitectura limpia",
-                text: "Código tipado, responsabilidades separadas y decisiones documentadas para que el próximo cambio no duela.",
+                icon: Palette,
+                title: "Diseño con fundamento",
+                text: "Nada de decisiones visuales al azar. Color, tipografía, retícula y jerarquía responden a principios, no a modas pasajeras.",
               },
               {
-                icon: GitBranch,
-                title: "Entrega continua",
-                text: "Avances visibles cada semana. Nada de misterio: ves el progreso y participas en las decisiones.",
+                icon: Server,
+                title: "Infraestructura sólida",
+                text: "Respaldos probados, monitoreo activo y despliegue sin caídas. La parte invisible es la que sostiene todo lo demás.",
               },
               {
                 icon: ShieldCheck,
                 title: "Excelencia impecable",
-                text: "El estándar es que funcione, esté bien y se pueda mantener. Sin atajos que se cobren después.",
+                text: "El estándar es que funcione, se vea bien y se pueda mantener. Sin atajos que se cobren después.",
               },
             ].map((p, i) => (
               <Reveal key={p.title} delay={i * 90}>
@@ -368,7 +486,7 @@ export default async function HomePage() {
                       JHOIKER ZAMBRANO
                     </p>
                     <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-steel-dim">
-                      {BRAND.role}
+                      Páginas web · Diseño gráfico · Infraestructura
                     </p>
                   </div>
                 </div>

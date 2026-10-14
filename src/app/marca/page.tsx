@@ -268,7 +268,7 @@ export default function MarcaPage() {
                   { label: "Display / Hero", cls: "font-display text-4xl font-black text-white", sample: "JHOIKER ZAMBRANO" },
                   { label: "Titular de sección", cls: "font-display text-2xl font-black text-white", sample: "El trabajo habla por sí mismo" },
                   { label: "Subtítulo", cls: "font-sans text-lg font-light text-chrome", sample: "Ingeniería de Software & Arquitectura Digital" },
-                  { label: "Cuerpo de texto", cls: "font-sans text-[0.92rem] text-steel", sample: "Desarrollo web a medida, automatizaciones fluidas y soluciones digitales." },
+                  { label: "Cuerpo de texto", cls: "font-sans text-[0.92rem] text-steel", sample: "Páginas web a medida, diseño de interfaz e infraestructura administrada." },
                   { label: "Etiqueta técnica", cls: "font-mono text-[0.68rem] uppercase tracking-[0.18em] text-cyan-energy", sample: "CLÁUSULA TÉCNICA · ARTÍCULO 07" },
                   { label: "Código", cls: "font-mono text-sm text-cyan-energy", sample: 'const brand = "Jhoiker Zambrano";' },
                 ].map((row) => (
@@ -455,7 +455,7 @@ export default function MarcaPage() {
                     </label>
                     <select id="marca-demo-select" className="field">
                       <option>Desarrollo web a medida</option>
-                      <option>Automatización de procesos</option>
+                      <option>Servidores e infraestructura</option>
                       <option>Arquitectura y consultoría</option>
                     </select>
                   </div>
@@ -539,8 +539,8 @@ export default function MarcaPage() {
                     <CheckCircle2 className="h-3.5 w-3.5" /> Así sí
                   </p>
                   <p className="mt-3 text-[0.88rem] leading-relaxed text-chrome">
-                    «Construyo software que resuelve problemas reales y automatizo lo que no debería
-                    consumir tu tiempo.»
+                    «Construyo páginas web y aplicaciones que se ven bien y funcionan mejor, y me
+                    encargo de los servidores donde viven.»
                   </p>
                 </div>
                 <div>

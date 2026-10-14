@@ -21,7 +21,7 @@ const MAP: Record<string, { label: string; tone: Tone }> = {
   ganado: { label: "Ganado", tone: "success" },
   perdido: { label: "Perdido", tone: "danger" },
   archivado: { label: "Archivado", tone: "muted" },
-  // Proyectos / automatizaciones
+  // Proyectos
   publicado: { label: "Publicado", tone: "success" },
   activa: { label: "Activa", tone: "success" },
   activo: { label: "Activo", tone: "success" },

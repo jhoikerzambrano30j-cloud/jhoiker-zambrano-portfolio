@@ -11,6 +11,7 @@ export const BRAND = {
   wordmark: "JHOIKER ZAMBRANO",
   role: "Ingeniería de Software & Arquitectura Digital",
   roleShort: "Ingeniería de Software",
+  focus: "Páginas web · Diseño gráfico · Infraestructura",
   tagline: "Eficiencia técnica absoluta.",
   manualVersion: "v3.0",
   owner: "Jhoiker Zambrano",
@@ -45,7 +46,7 @@ export const PALETTE = [
     hex: "#818CF8",
     rgb: "129, 140, 248",
     description:
-      "Ideal para tarjetas secundarias, separadores y acentos en flujos de automatización.",
+      "Ideal para tarjetas secundarias, separadores y acentos de apoyo.",
     usage: "secondary",
   },
   {
