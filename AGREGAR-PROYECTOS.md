@@ -74,9 +74,9 @@ En el panel todavía **no hay un campo para las métricas** (los números tipo �
 | **Peso máximo** | 5 MB por imagen |
 | **Portada — tamaño ideal** | 1600 × 1000 px (proporción 16:10) |
 | **Galería — tamaño ideal** | 1600 × 1000 px |
-| **Recomendación** | Si una foto pesa más de 500 KB, comprímela antes en [squoosh.app](https://squoosh.app) — es gratis y no necesita registro |
+| **Recomendación** | No hace falta que las comprimas: el sistema lo hace solo al subirlas |
 
-> El sistema las optimiza y las sirve en el formato más liviano que entienda el navegador del visitante, así que tu web no se pondrá lenta.
+> **Se comprimen y convierten a WebP solas.** Una foto de 5 MB termina pesando unos cientos de kilobytes, ya en el tamaño que se muestra en la web. Así tu web no se pone lenta y no tienes que hacer nada.
 
 ---
 

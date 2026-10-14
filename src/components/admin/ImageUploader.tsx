@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ImagePlus, X, Loader2, AlertTriangle, Link2, Images } from "lucide-react";
+import { ImagePlus, X, Loader2, AlertTriangle, Link2, Images, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -9,9 +9,123 @@ const BUCKET = "project-images";
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB, igual que el límite del bucket
 const TIPOS = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"];
 
-/** Genera un nombre de archivo seguro y único. */
-function nombreArchivo(file: File) {
-  const base = file.name
+/* ------------------------------------------------------------------ */
+/*  Optimización para web                                              */
+/* ------------------------------------------------------------------ */
+
+/** Proporción y tamaño máximo según el uso. */
+const OBJETIVO = {
+  portada: { ancho: 1600, alto: 1000 },
+  galeria: { ancho: 1400, alto: 900 },
+} as const;
+
+type Uso = keyof typeof OBJETIVO;
+
+/** Calidad de compresión: buen equilibrio entre peso y nitidez. */
+const CALIDAD = 0.82;
+
+/** Por debajo de este peso no vale la pena recomprimir. */
+const UMBRAL_RECOMPRESION = 220 * 1024;
+
+interface Optimizada {
+  blob: Blob;
+  ancho: number;
+  alto: number;
+  bytesAntes: number;
+  bytesDespues: number;
+  extension: string;
+}
+
+function kb(n: number) {
+  return `${Math.round(n / 1024)} KB`;
+}
+
+/**
+ * Reduce la imagen y la convierte a WebP.
+ *
+ * Todo ocurre en el navegador, antes de subirla: la foto sale del celular
+ * pesando varios megabytes y llega al servidor como un WebP de unos cientos
+ * de kilobytes, ya en el tamaño que se muestra en la web.
+ */
+async function optimizar(file: File, uso: Uso): Promise<Optimizada> {
+  const { ancho: maxAncho, alto: maxAlto } = OBJETIVO[uso];
+
+  // Se decodifica respetando la orientación EXIF (fotos de celular).
+  let bitmap: ImageBitmap | HTMLImageElement;
+  let anchoOriginal: number;
+  let altoOriginal: number;
+
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    bitmap = bmp;
+    anchoOriginal = bmp.width;
+    altoOriginal = bmp.height;
+  } catch {
+    // Navegadores sin createImageBitmap con orientación: se usa <img>.
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const el = new Image();
+        el.onload = () => resolve(el);
+        el.onerror = () => reject(new Error("No se pudo leer la imagen"));
+        el.src = url;
+      });
+      bitmap = img;
+      anchoOriginal = img.naturalWidth;
+      altoOriginal = img.naturalHeight;
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  // Escala proporcional: nunca se agranda una imagen pequeña.
+  const factor = Math.min(1, maxAncho / anchoOriginal, maxAlto / altoOriginal);
+  const ancho = Math.max(1, Math.round(anchoOriginal * factor));
+  const alto = Math.max(1, Math.round(altoOriginal * factor));
+
+  const lienzo = document.createElement("canvas");
+  lienzo.width = ancho;
+  lienzo.height = alto;
+  const ctx = lienzo.getContext("2d");
+  if (!ctx) throw new Error("El navegador no permitió procesar la imagen");
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(bitmap as CanvasImageSource, 0, 0, ancho, alto);
+  if ("close" in bitmap && typeof bitmap.close === "function") bitmap.close();
+
+  // Se intenta WebP; si el navegador no lo soporta, se cae a JPEG.
+  const comoWebp = await new Promise<Blob | null>((resolve) =>
+    lienzo.toBlob(resolve, "image/webp", CALIDAD),
+  );
+
+  let blob: Blob;
+  let extension: string;
+  if (comoWebp) {
+    blob = comoWebp;
+    extension = "webp";
+  } else {
+    const comoJpeg = await new Promise<Blob | null>((resolve) =>
+      lienzo.toBlob(resolve, "image/jpeg", 0.85),
+    );
+    if (!comoJpeg) throw new Error("El navegador no pudo convertir la imagen");
+    blob = comoJpeg;
+    extension = "jpg";
+  }
+
+  return {
+    blob,
+    ancho,
+    alto,
+    bytesAntes: file.size,
+    bytesDespues: blob.size,
+    extension,
+  };
+}
+
+/** Genera un nombre de archivo seguro y único con la extensión dada. */
+function nombreArchivo(original: string, extension: string) {
+  const base = original
     .replace(/\.[^.]+$/, "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -19,9 +133,8 @@ function nombreArchivo(file: File) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 48) || "imagen";
-  const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
   const azar = Math.random().toString(36).slice(2, 8);
-  return `${base}-${Date.now().toString(36)}-${azar}.${ext}`;
+  return `${base}-${Date.now().toString(36)}-${azar}.${extension}`;
 }
 
 function validar(file: File): string | null {
@@ -29,26 +142,42 @@ function validar(file: File): string | null {
     return `Formato no permitido (${file.type || "desconocido"}). Usa JPG, PNG, WebP, AVIF o GIF.`;
   }
   if (file.size > MAX_BYTES) {
-    return `La imagen pesa ${(file.size / 1024 / 1024).toFixed(1)} MB. El máximo es 5 MB.`;
+    return `La imagen pesa ${(file.size / 1024 / 1024).toFixed(1)} MB. El máximo antes de optimizar es 5 MB.`;
   }
   return null;
 }
 
 /**
- * Sube una imagen a Supabase Storage y devuelve su URL pública.
- * Se usa tanto para la portada como para las imágenes de la galería.
+ * Optimiza (si hace falta) y sube una imagen.
+ * Devuelve la URL pública y un resumen de lo que se hizo.
  */
-async function subir(file: File): Promise<string> {
+async function subirYOptimizar(
+  file: File,
+  uso: Uso,
+): Promise<{ url: string; resumen: string }> {
+  let aSubir: Blob = file;
+  let extension = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+  let resumen = `Sin recomprimir (${kb(file.size)})`;
+
+  if (file.type !== "image/gif" && file.size > UMBRAL_RECOMPRESION) {
+    const o = await optimizar(file, uso);
+    aSubir = o.blob;
+    extension = o.extension;
+    const ahorro = o.bytesAntes > 0 ? Math.round((1 - o.bytesDespues / o.bytesAntes) * 100) : 0;
+    resumen = `${kb(o.bytesAntes)} → ${kb(o.bytesDespues)} (−${ahorro}%) · ${o.ancho}×${o.alto} · ${o.extension.toUpperCase()}`;
+  }
+
+  const path = nombreArchivo(file.name, extension);
   const supabase = createClient();
-  const path = nombreArchivo(file);
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+  const { error } = await supabase.storage.from(BUCKET).upload(path, aSubir, {
     cacheControl: "31536000",
     upsert: false,
-    contentType: file.type,
+    contentType: aSubir.type || `image/${extension}`,
   });
   if (error) throw new Error(error.message);
+
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return data.publicUrl;
+  return { url: data.publicUrl, resumen };
 }
 
 /* ------------------------------------------------------------------ */
@@ -62,7 +191,8 @@ export function CoverUploader({
   initialUrl?: string | null;
 }) {
   const [url, setUrl] = useState(initialUrl ?? "");
-  const [subiendo, setSubiendo] = useState(false);
+  const [estado, setEstado] = useState<string | null>(null);
+  const [trabajando, setTrabajando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [modo, setModo] = useState<"subir" | "url">("subir");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,13 +202,17 @@ export function CoverUploader({
     const problema = validar(file);
     if (problema) { setError(problema); return; }
     setError(null);
-    setSubiendo(true);
+    setTrabajando(true);
+    setEstado("Optimizando…");
     try {
-      setUrl(await subir(file));
+      const { url: nueva, resumen } = await subirYOptimizar(file, "portada");
+      setUrl(nueva);
+      setEstado(resumen);
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudo subir la imagen");
+      setEstado(null);
     } finally {
-      setSubiendo(false);
+      setTrabajando(false);
     }
   }
 
@@ -105,7 +239,6 @@ export function CoverUploader({
         </div>
       </div>
 
-      {/* El valor real que se envía al servidor */}
       <input type="hidden" name={name} value={url} />
 
       {url && (
@@ -114,7 +247,7 @@ export function CoverUploader({
           <img src={url} alt="Vista previa de la portada" className="h-36 w-full object-cover" />
           <button
             type="button"
-            onClick={() => { setUrl(""); setError(null); }}
+            onClick={() => { setUrl(""); setError(null); setEstado(null); }}
             className="absolute right-2 top-2 inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/20 bg-obsidian/80 text-chrome backdrop-blur transition-colors hover:border-rose-400/50 hover:text-rose-300"
             aria-label="Quitar imagen"
           >
@@ -135,18 +268,22 @@ export function CoverUploader({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            disabled={subiendo}
+            disabled={trabajando}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-white/15 bg-white/[0.02] px-3.5 py-3 text-[0.8rem] text-chrome transition-colors hover:border-cyan-energy/45 hover:text-cyan-energy"
           >
-            {subiendo ? (
-              <><Loader2 className="h-4 w-4 animate-spin" /> Subiendo…</>
+            {trabajando ? (
+              <><Loader2 className="h-4 w-4 animate-spin" /> {estado ?? "Optimizando…"}</>
             ) : (
               <><ImagePlus className="h-4 w-4" /> {url ? "Cambiar imagen" : "Elegir imagen"}</>
             )}
           </button>
-          <p className="mt-1.5 font-mono text-[0.6rem] text-steel-faint">
-            JPG, PNG, WebP, AVIF o GIF · máximo 5 MB · recomendado 1600×1000 px
+          <p className="mt-1.5 flex items-start gap-1.5 font-mono text-[0.6rem] leading-snug text-steel-faint">
+            <Sparkles className="mt-0.5 h-3 w-3 shrink-0 text-cyan-energy/60" />
+            Se comprime y convierte a WebP sola, a 1600×1000 px. Máximo 5 MB de origen.
           </p>
+          {estado && !trabajando && (
+            <p className="mt-1 font-mono text-[0.62rem] text-emerald-300/90">{estado}</p>
+          )}
         </div>
       ) : (
         <div className="mt-3">
@@ -187,7 +324,8 @@ export function GalleryUploader({
   initial?: string[];
 }) {
   const [urls, setUrls] = useState<string[]>(initial);
-  const [subiendo, setSubiendo] = useState(false);
+  const [trabajando, setTrabajando] = useState(false);
+  const [estado, setEstado] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -199,15 +337,31 @@ export function GalleryUploader({
       if (problema) { setError(problema); return; }
     }
     setError(null);
-    setSubiendo(true);
+    setTrabajando(true);
+
+    const originales = lista.reduce((a, f) => a + f.size, 0);
+    let subidas: string[] = [];
+    let total = 0;
     try {
-      const subidas: string[] = [];
-      for (const f of lista) subidas.push(await subir(f));
+      for (let i = 0; i < lista.length; i++) {
+        setEstado(lista.length > 1 ? `Optimizando ${i + 1} de ${lista.length}…` : "Optimizando…");
+        const { url, resumen } = await subirYOptimizar(lista[i], "galeria");
+        subidas = [...subidas, url];
+        total += Number(resumen.match(/→ (\d+) KB/)?.[1] ?? 0) * 1024;
+      }
       setUrls((prev) => [...prev, ...subidas]);
+      const ahorro = originales > 0 && total > 0 ? Math.round((1 - total / originales) * 100) : null;
+      setEstado(
+        lista.length === 1
+          ? "Imagen optimizada y subida"
+          : `${lista.length} imágenes optimizadas y subidas${ahorro !== null ? ` (−${ahorro}%)` : ""}`,
+      );
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudieron subir las imágenes");
+      setEstado(null);
+      if (subidas.length > 0) setUrls((prev) => [...prev, ...subidas]);
     } finally {
-      setSubiendo(false);
+      setTrabajando(false);
     }
   }
 
@@ -223,7 +377,6 @@ export function GalleryUploader({
 
   return (
     <div>
-      {/* Un valor por línea: coincide con el formato que espera el servidor */}
       <input type="hidden" name={name} value={urls.join("\n")} />
 
       <div className="flex items-center justify-between">
@@ -283,15 +436,22 @@ export function GalleryUploader({
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        disabled={subiendo}
+        disabled={trabajando}
         className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-white/15 bg-white/[0.02] px-3.5 py-2.5 text-[0.8rem] text-chrome transition-colors hover:border-cyan-energy/45 hover:text-cyan-energy"
       >
-        {subiendo ? (
-          <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Subiendo…</>
+        {trabajando ? (
+          <><Loader2 className="h-3.5 w-3.5 animate-spin" /> {estado ?? "Optimizando…"}</>
         ) : (
           <><Images className="h-3.5 w-3.5" /> Añadir imágenes</>
         )}
       </button>
+      <p className="mt-1.5 flex items-start gap-1.5 font-mono text-[0.6rem] leading-snug text-steel-faint">
+        <Sparkles className="mt-0.5 h-3 w-3 shrink-0 text-cyan-energy/60" />
+        Se comprimen y convierten a WebP solas, a 1400×900 px. Puedes elegir varias a la vez.
+      </p>
+      {estado && !trabajando && (
+        <p className="mt-1 font-mono text-[0.62rem] text-emerald-300/90">{estado}</p>
+      )}
 
       {error && (
         <p className="mt-2 flex items-start gap-2 font-mono text-[0.66rem] leading-snug text-rose-400">
