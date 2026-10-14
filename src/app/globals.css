@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+/* =========================================================================
+   MANUAL DE IDENTIDAD DE MARCA — JHOIKER ZAMBRANO v3.0
+   Ingeniería de Software & Arquitectura Digital
+   -------------------------------------------------------------------------
+   Paleta oficial:
+     Obsidian Deep      #0A0D14   Fondo base
+     Cyan Energy        #38BDF8   Acento principal / neón
+     Indigo Automation  #818CF8   Secundario
+     Slate Surface      #1E293B   Contenedores
+   Tipografías oficiales:
+     Orbitron           Titulares, encabezados e isotipo
+     Plus Jakarta Sans  Cuerpo de texto, contratos y catálogos
+     JetBrains Mono     Bloques de código, precios y variables técnicas
+   ========================================================================= */
+
+@theme {
+  /* ---- Paleta cromática oficial ---- */
+  --color-obsidian: #0a0d14;
+  --color-obsidian-800: #0f1420;
+  --color-obsidian-700: #141b2b;
+  --color-cyan-energy: #38bdf8;
+  --color-cyan-deep: #0ea5e9;
+  --color-indigo-automation: #818cf8;
+  --color-slate-surface: #1e293b;
+  --color-slate-surface-2: #24334a;
+  --color-steel: #94a3b8;
+  --color-steel-dim: #64748b;
+  --color-steel-faint: #475569;
+  --color-chrome: #cbd5e1;
+  --color-white-soft: #e0e6ed;
+
+  /* ---- Tipografías oficiales ---- */
+  --font-display: var(--font-orbitron), "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- Sombras / glow de marca ---- */
+  --shadow-glow-cyan: 0 0 0 1px rgba(56, 189, 248, 0.28), 0 0 28px -6px rgba(56, 189, 248, 0.45);
+  --shadow-glow-cyan-lg: 0 0 0 1px rgba(56, 189, 248, 0.4), 0 0 60px -10px rgba(56, 189, 248, 0.65);
+  --shadow-glow-indigo: 0 0 0 1px rgba(129, 140, 248, 0.28), 0 0 28px -6px rgba(129, 140, 248, 0.45);
+
+  /* ---- Animaciones ---- */
+  --animate-scan: scan 4.5s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-glow: pulseGlow 3.2s ease-in-out infinite;
+  --animate-grid-drift: gridDrift 24s linear infinite;
+  --animate-bracket-l: bracketL 3.4s ease-in-out infinite;
+  --animate-bracket-r: bracketR 3.4s ease-in-out infinite;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-blink: blink 1.05s step-end infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-110%); opacity: 0; }
+  8% { opacity: 0.85; }
+  92% { opacity: 0.85; }
+  100% { transform: translateY(110%); opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) }
+  50% { transform: translateY(-14px) }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1) }
+  50% { opacity: 1; transform: scale(1.06) }
+}
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0 }
+  to { background-position: 64px 64px, 64px 64px }
+}
+@keyframes bracketL {
+  0%, 100% { transform: translateX(0) }
+  50% { transform: translateX(-7px) }
+}
+@keyframes bracketR {
+  0%, 100% { transform: translateX(0) }
+  50% { transform: translateX(7px) }
+}
+@keyframes marquee {
+  from { transform: translateX(0) }
+  to { transform: translateX(-50%) }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0 }
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(22px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+
+/* =========================================================================
+   BASE
+   ========================================================================= */
+@layer base {
+  * {
+    border-color: rgba(148, 163, 184, 0.12);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-obsidian);
+    color: var(--color-white-soft);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(56, 189, 248, 0.3);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+
+  code, pre, kbd, samp, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Scrollbar de marca */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0a0d14; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #1e293b, #38bdf8 55%, #818cf8);
+    border-radius: 99px;
+    border: 2px solid #0a0d14;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #38bdf8, #818cf8); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-energy);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  input, textarea, select, button { font-family: inherit; }
+}
+
+/* =========================================================================
+   UTILIDADES DE MARCA
+   ========================================================================= */
+@utility grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.055) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility dot-backdrop {
+  background-image: radial-gradient(rgba(56, 189, 248, 0.14) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+@utility text-glow-cyan {
+  text-shadow: 0 0 18px rgba(56, 189, 248, 0.55), 0 0 44px rgba(56, 189, 248, 0.25);
+}
+
+@utility text-gradient-brand {
+  background: linear-gradient(100deg, #ffffff 0%, #cbd5e1 32%, #38bdf8 68%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility surface-card {
+  background:
+    linear-gradient(160deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 20, 32, 0.92) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+@utility surface-glass {
+  background: rgba(10, 13, 20, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(16px) saturate(160%);
+}
+
+/* ---- Componentes de marca reutilizables ---- */
+@layer components {
+  .brand-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .brand-container { padding-inline: 2rem; }
+  }
+
+  /* Botón primario cyan neón */
+  .btn-cyan {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(100deg, #38bdf8, #0ea5e9);
+    color: #04141f;
+    font-weight: 700;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 0 26px -8px rgba(56, 189, 248, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.6);
+  }
+  .btn-cyan:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px -4px rgba(56, 189, 248, 0.95);
+  }
+
+  /* Botón fantasma con borde de marca */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 0.6rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-white-soft);
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: rgba(30, 41, 59, 0.35);
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(56, 189, 248, 0.65);
+    color: #fff;
+    background: rgba(56, 189, 248, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Etiqueta monoespaciada estilo terminal */
+  .tag-mono {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-cyan-energy);
+    border: 1px solid rgba(56, 189, 248, 0.32);
+    background: rgba(56, 189, 248, 0.07);
+    padding: 0.32rem 0.7rem;
+    border-radius: 99px;
+  }
+
+  /* Título de sección con barra de acento */
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.7), rgba(129, 140, 248, 0.28), transparent);
+  }
+
+  /* Enlaces del nav con subrayado neón */
+  .nav-link {
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-steel);
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: #fff; }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -6px;
+    height: 2px; width: 0;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    transition: width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border-radius: 2px;
+  }
+  .nav-link:hover::after,
+  .nav-link[data-active="true"]::after { width: 100%; }
+  .nav-link[data-active="true"] { color: #fff; }
+
+  /* Campo de formulario */
+  .field {
+    width: 100%;
+    border-radius: 0.55rem;
+    background: rgba(10, 13, 20, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    color: var(--color-white-soft);
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .field::placeholder { color: var(--color-steel-faint); }
+  .field:focus {
+    outline: none;
+    border-color: rgba(56, 189, 248, 0.75);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
+  }
+
+  .label-mono {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-steel-dim);
+    margin-bottom: 0.4rem;
+  }
+
+  /* Borde superior de tarjeta con acento */
+  .card-accent {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-accent::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0; top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #38bdf8, #818cf8, transparent);
+    opacity: 0.75;
+  }
+
+  .reveal {
+    animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- Impresión: contratos limpios en papel ---- */
+@media print {
+  .no-print { display: none !important; }
+  body {
+    background: #fff !important;
+    color: #0a0d14 !important;
+  }
+  .print-doc, .print-doc * {
+    color: #0a0d14 !important;
+    background: transparent !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  .print-doc { padding: 0 !important; }
+}

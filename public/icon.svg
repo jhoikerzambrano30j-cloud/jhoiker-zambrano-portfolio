@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="12" fill="#0A0D14"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="11.5" fill="none" stroke="#38BDF8" stroke-opacity="0.35"/>
+  <g font-family="Orbitron, Arial Black, sans-serif" font-weight="900" font-size="26" text-anchor="middle">
+    <text x="12" y="42" fill="#FFFFFF" font-size="30">[</text>
+    <text x="26" y="42" fill="#FFFFFF">J</text>
+    <text x="41" y="42" fill="#38BDF8">Z</text>
+    <text x="55" y="42" fill="#FFFFFF" font-size="30">]</text>
+  </g>
+</svg>

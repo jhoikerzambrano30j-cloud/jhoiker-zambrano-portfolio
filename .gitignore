@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/
+
+# builds
+.next/
+out/
+build/
+dist/
+.vercel/
+.turbo/
+
+# environment
+.env
+.env.local
+.env*.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# misc
+coverage/
+.selfhosted
+
+# SQL generado por `pnpm db:sql --write` (se reconstruye desde las migraciones)
+supabase/apply-all.sql

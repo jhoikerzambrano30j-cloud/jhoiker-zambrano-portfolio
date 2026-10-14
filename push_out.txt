@@ -1,0 +1,12 @@
+
+[1m[36m═══ PUBLICAR EN GITHUB ═══[0m
+
+[1m1. Verificar el token de GitHub[0m
+[32m  ✓[0m Token válido. Usuario: [1mjhoikerzambrano30j-cloud[0m
+
+[1m2. Preparar el repositorio[0m
+[32m  ✓[0m El repositorio ya existe: https://github.com/jhoikerzambrano30j-cloud/jhoiker-zambrano-portfolio
+
+[1m3. Subir los archivos[0m
+[36m  →[0m 106 archivos a publicar (958 KB)
+[32m  ✓[0m Ningún archivo sensible en la lista
