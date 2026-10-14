@@ -35,6 +35,7 @@ const projectSchema = z.object({
   role: z.string().optional().or(z.literal("")),
   repo_url: z.string().optional().or(z.literal("")),
   live_url: z.string().optional().or(z.literal("")),
+  cover_url: z.string().optional().or(z.literal("")),
   sort_order: z.coerce.number().int().default(0),
 });
 
@@ -64,6 +65,7 @@ export async function saveProject(
       role: formData.get("role"),
       repo_url: formData.get("repo_url"),
       live_url: formData.get("live_url"),
+      cover_url: formData.get("cover_url"),
       sort_order: formData.get("sort_order") || 0,
     });
 
@@ -84,9 +86,11 @@ export async function saveProject(
       role: d.role || null,
       repo_url: d.repo_url || null,
       live_url: d.live_url || null,
+      cover_url: d.cover_url || null,
       sort_order: d.sort_order,
       stack: toArray(formData.get("stack")),
       tags: toArray(formData.get("tags")),
+      gallery: toArray(formData.get("gallery")),
       featured: formData.get("featured") === "on",
     };
 

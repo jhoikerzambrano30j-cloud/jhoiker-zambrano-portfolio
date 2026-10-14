@@ -5,6 +5,7 @@ import { Pencil, Trash2, Star, Plus, X, AlertTriangle, Loader2, Check } from "lu
 import { Card, Badge } from "@/components/ui/Primitives";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { saveProject, deleteProject, toggleProjectFeatured } from "@/app/admin/proyectos/actions";
+import { CoverUploader, GalleryUploader } from "@/components/admin/ImageUploader";
 import { cn } from "@/lib/utils";
 import type { Project, ProjectCategory } from "@/lib/types";
 
@@ -365,6 +366,9 @@ export function ProjectsManager({ projects }: { projects: Project[] }) {
 
               <Field label="URL del repositorio" name="repo_url" defaultValue={editing?.repo_url} placeholder="https://github.com/..." />
               <Field label="URL en vivo" name="live_url" defaultValue={editing?.live_url} placeholder="https://..." />
+
+              <CoverUploader name="cover_url" initialUrl={editing?.cover_url} />
+              <GalleryUploader name="gallery" initial={editing?.gallery ?? []} />
 
               <label className="flex items-center gap-3 rounded-lg border border-white/[0.08] p-3.5">
                 <input

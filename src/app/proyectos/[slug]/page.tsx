@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ExternalLink, Github, Calendar, Building2, User, Target, Lightbulb, TrendingUp } from "lucide-react";
 import { Badge, Card } from "@/components/ui/Primitives";
 import { Reveal } from "@/components/ui/Reveal";
@@ -215,6 +216,46 @@ export default async function ProjectDetailPage({
           </Reveal>
         </div>
       </section>
+
+      {/* Galería */}
+      {project.gallery.length > 0 && (
+        <section className="py-14">
+          <div className="brand-container">
+            <Reveal>
+              <h2 className="font-display text-2xl font-black text-white">
+                <span className="text-cyan-energy">Galería</span>
+              </h2>
+              <div className="hairline mt-4 w-20" />
+            </Reveal>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {project.gallery.map((url, i) => (
+                <Reveal key={`${url}-${i}`} delay={i * 70}>
+                  <figure className="surface-card group overflow-hidden rounded-xl">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-obsidian-800">
+                      <Image
+                        src={url}
+                        alt={`${project.title} — imagen ${i + 1}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+                    </div>
+                    <figcaption className="flex items-center justify-between px-4 py-3">
+                      <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-steel-faint">
+                        {String(i + 1).padStart(2, "0")} / {String(project.gallery.length).padStart(2, "0")}
+                      </span>
+                      <span className="font-display text-[0.6rem] font-black text-cyan-energy/40">
+                        [JZ]
+                      </span>
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Métricas */}
       {project.metrics.length > 0 && (
