@@ -15,7 +15,8 @@
     "db:check": "node scripts/validate-sql.mjs",
     "check": "node scripts/final-check.mjs",
     "push": "node scripts/push-to-github.mjs",
-    "push:test": "node scripts/push-to-github.mjs --dry-run"
+    "push:test": "node scripts/push-to-github.mjs --dry-run",
+    "deploy": "vercel deploy --prod --yes"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
@@ -38,7 +39,8 @@
     "eslint": "^9.18.0",
     "eslint-config-next": "15.5.27",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vercel": "^63.1.2"
   },
   "engines": {
     "node": ">=20"

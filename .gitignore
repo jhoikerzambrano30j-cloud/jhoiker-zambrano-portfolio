@@ -42,3 +42,14 @@ coverage/
 
 # SQL generado por `pnpm db:sql --write` (se reconstruye desde las migraciones)
 supabase/apply-all.sql
+
+# archivos de registro de los scripts
+push_out.txt
+push_err.txt
+*_out.txt
+*_err.txt
+
+
+# archivo personal con credenciales
+TUS-ACCESOS.md
+

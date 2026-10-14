@@ -9,6 +9,14 @@ contratos** con generación de PDF.
 > trabajo habla por sí mismo y cada solución cuenta con un estándar de
 > excelencia impecable.»
 
+**En producción:** <https://jhoiker-zambrano-portfolio.vercel.app>
+
+| Recurso | Dónde |
+|---|---|
+| Web pública | <https://jhoiker-zambrano-portfolio.vercel.app> |
+| Panel privado | `/acceso` |
+| Repositorio | <https://github.com/jhoikerzambrano30j-cloud/jhoiker-zambrano-portfolio> |
+
 ---
 
 ## Índice
