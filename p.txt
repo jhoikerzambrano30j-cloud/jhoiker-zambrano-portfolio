@@ -8,6 +8,6 @@
 [32m  ✓[0m El repositorio ya existe: https://github.com/jhoikerzambrano30j-cloud/jhoiker-zambrano-portfolio
 
 [1m3. Subir los archivos[0m
-[36m  →[0m 102 archivos a publicar (1059 KB)
+[36m  →[0m 105 archivos a publicar (1082 KB)
 [32m  ✓[0m Ningún archivo sensible en la lista
 [36m  →[0m 36 patrones de .gitignore aplicados

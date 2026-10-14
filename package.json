@@ -14,6 +14,8 @@
     "db:setup": "node scripts/setup-supabase.mjs",
     "db:check": "node scripts/validate-sql.mjs",
     "check": "node scripts/final-check.mjs",
+    "sync:plantillas": "node scripts/sync-plantillas-contrato.mjs",
+    "aceptacion": "node scripts/aceptacion.mjs",
     "push": "node scripts/push-to-github.mjs",
     "push:test": "node scripts/push-to-github.mjs --dry-run",
     "deploy": "vercel deploy --prod --yes"
