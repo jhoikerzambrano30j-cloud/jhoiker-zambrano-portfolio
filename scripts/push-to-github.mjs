@@ -93,7 +93,9 @@ const IGNORE_FILES = new Set([
   ".DS_Store",
   "Thumbs.db",
 ]);
-const IGNORE_SUFFIX = [".tsbuildinfo", ".log"];
+// Los `.txt` en la raíz son casi siempre archivos de registro temporales de los
+// propios scripts; se excluyen para que no acaben publicados por descuido.
+const IGNORE_SUFFIX = [".tsbuildinfo", ".log", ".txt"];
 
 /**
  * Patrones leídos del `.gitignore` real del proyecto.

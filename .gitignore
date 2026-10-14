@@ -48,6 +48,13 @@ push_out.txt
 push_err.txt
 *_out.txt
 *_err.txt
+p.txt
+ac.txt
+fc.txt
+
+# cualquier .txt temporal en la raíz
+# (los .txt reales del proyecto viven dentro de src/ y public/)
+/*.txt
 
 
 # archivo personal con credenciales
