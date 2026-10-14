@@ -52,10 +52,13 @@ Todo lo demás está automatizado:
 
 | Comando | Qué hace |
 |---|---|
+| `pnpm aceptacion` | **Prueba de aceptación contra los servicios reales**: las 10 rutas públicas, la seguridad del panel, el contenido de la base de datos, el aislamiento por RLS, el login del administrador y las 4 plantillas de contrato (42 comprobaciones) |
+| `pnpm check` | 90 comprobaciones estáticas: archivos clave, rutas, identidad de marca exacta y que no se filtren secretos |
+| `pnpm sync:plantillas` | Comprueba que las plantillas de contrato en la base de datos coincidan con el código (añade `--aplicar` para sincronizarlas) |
 | `pnpm db:setup` | Valida las claves, aplica el esquema completo vía Management API, verifica el contenido y crea tu usuario administrador |
 | `pnpm db:check` | Analiza el SQL sin ejecutarlo: balance de bloques, coherencia esquema ↔ tipos y reglas de seguridad |
-| `pnpm db:sql --write` | Genera `supabase/apply-all.sql` con las 3 migraciones concatenadas, para pegar en el SQL Editor |
-| `pnpm push` | Crea el repositorio en GitHub y sube los 100 archivos con la API REST (no requiere Git instalado) |
+| `pnpm db:sql --write` | Genera `supabase/apply-all.sql` con las migraciones concatenadas, para pegar en el SQL Editor |
+| `pnpm push` | Crea el repositorio en GitHub y sube los archivos con la API REST (no requiere Git instalado) |
 | `pnpm push:test` | Modo de prueba: valida el proceso sin publicar nada |
 
 Antes de ejecutarlos, rellena `.env.local` (sigue las instrucciones dentro del
