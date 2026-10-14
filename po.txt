@@ -8,5 +8,5 @@
 [32m  ✓[0m El repositorio ya existe: https://github.com/jhoikerzambrano30j-cloud/jhoiker-zambrano-portfolio
 
 [1m3. Subir los archivos[0m
-[36m  →[0m 108 archivos a publicar (1058 KB)
+[36m  →[0m 110 archivos a publicar (1412 KB)
 [32m  ✓[0m Ningún archivo sensible en la lista
